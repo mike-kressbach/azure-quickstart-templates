@@ -139,3 +139,47 @@ time sudo apt-get -y --force-yes install -f
 time rm /tmp/google-chrome-stable_current_amd64.deb
 date
 echo "completed ubuntu devbox install on pid $$"
+
+
+#########################################
+# Setup Mavin
+#########################################
+#Update Apt Get Packages
+sudo apt-get update
+
+#Make mavin site folder and set permissions
+sudo -i -u $AZUREUSER mkdir $HOMEDIR/Desktop/mavin-site
+sudo -i -u $AZUREUSER chmod 755 $HOMEDIR/Desktop/mavin-site
+
+#Make mavin cron folder, create cron job script and set permissions
+sudo -i -u $AZUREUSER mkdir $HOMEDIR/Desktop/mavin-cron
+sudo -i -u $AZUREUSER touch $HOMEDIR/Desktop/mavin-cron/check-for-update
+sudo -i -u $AZUREUSER chmod 755 $HOMEDIR/Desktop/mavin-cron/check-for-update
+
+#write the to the cron job script file
+sudo -i -u $AZUREUSER $HOMEDIR/Desktop/mavin-cron/check-for-update <<EOF1
+wget http://mavinrepo.eastus.cloudapp.azure.com/downloads/mavin/mavin-enterprise
+mv mavin-enterprise.zip $HOMEDIR/Desktop/mavin-site
+cd $HOMEDIR/Desktop/mavin-site
+unzip -o mavin-enterprize.zip
+EOF1
+
+#set up cron job to run every sunday at midnight GMT
+crontab -l > updatecron
+#echo new cron into cron file
+echo "0 0 * * 0 $HOMEDIR/Desktop/mavin-cron/check-for-update" >> updatecron
+#install new cron file
+crontab updatecron
+rm updatecron
+
+#Get site for the first time
+wget http://mavinrepo.eastus.cloudapp.azure.com/downloads/mavin/mavin-enterprise
+mv mavin-enterprise.zip $HOMEDIR/Desktop/mavin-site
+cd $HOMEDIR/Desktop/mavin-site
+unzip -o mavin-enterprize.zip
+
+#Set up iptables rerouting
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
+
+#Save iptables save
+sudo iptables-save
