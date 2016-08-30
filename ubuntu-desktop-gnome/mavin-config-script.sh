@@ -354,7 +354,7 @@ sudo apt-get install -y mongodb-org=3.2.1 mongodb-org-server=3.2.1 mongodb-org-s
 cd $HOMEDIR/Desktop/mavin-splash
 
 #Download the node packages from the package.json file
-npm install
+sudo npm install
 
 #Run the mavin splash page
-forever start app.js
+sudo forever start app.js
