@@ -331,6 +331,13 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 300
 #Save iptables save
 sudo iptables-save
 
+#setup mongodb
+sudo service mongod stop
+
+sudo mkdir -p /data/db
+
+sudo service mongod start
+
 #Navigate to Mavin splash directory
 cd $HOMEDIR/Desktop/mavin-splash
 
