@@ -335,7 +335,7 @@ sudo iptables-save
 cd $HOMEDIR/Desktop/mavin-splash
 
 #Download the node packages from the package.json file
-npm install
+sudo npm install
 
 #Run the mavin splash page
-forever start app.js
+sudo forever start app.js
