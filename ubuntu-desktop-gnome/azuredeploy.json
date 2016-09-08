@@ -31,6 +31,7 @@
       "type": "string",
       "defaultValue": "Standard_D2",
       "allowedValues": [
+        "Standard_A1",
         "Standard_D1",
         "Standard_D2",
         "Standard_D3",
